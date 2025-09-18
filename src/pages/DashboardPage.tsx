@@ -16,10 +16,7 @@ import MainLayout from "../components/layout/MainLayout";
 // ShadCN chart helpers
 import {
   ChartContainer,
-  ChartTooltip,
   ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent,
   ChartConfig,
 } from "@/components/ui/chart";
 
@@ -51,18 +48,14 @@ export default function DashboardPage() {
     { day: "Sun", delivered: 15, pending: 5 },
   ];
 
-  const stockData = [
-    { category: "Electronics", value: 240 },
-    { category: "Furniture", value: 120 },
-    { category: "Consumables", value: 80 },
-  ];
+  const stockData = [{ Electronics: 240, Furniture: 120, Consumables: 80 }];
 
   const deliveryConfig = {
     delivered: { label: "Delivered", color: "#3b82f6" },
     pending: { label: "Pending", color: "#facc15" },
   };
 
-  const stockConfig = {
+  const stockConfig: ChartConfig = {
     Electronics: { label: "Electronics", color: "#6366f1" },
     Furniture: { label: "Furniture", color: "#10b981" },
     Consumables: { label: "Consumables", color: "#f59e0b" },
@@ -161,17 +154,9 @@ export default function DashboardPage() {
                   <XAxis dataKey="day" tickLine={false} axisLine={false} />
                   <YAxis />
                   <Tooltip content={<ChartTooltipContent labelKey="day" />} />
-                  <Legend content={<ChartLegendContent nameKey="day" />} />
-                  <Bar
-                    dataKey="delivered"
-                    fill="var(--color-delivered)"
-                    radius={4}
-                  />
-                  <Bar
-                    dataKey="pending"
-                    fill="var(--color-pending)"
-                    radius={4}
-                  />
+                  <Legend />
+                  <Bar dataKey="delivered" fill="#3b82f6" radius={4} />
+                  <Bar dataKey="pending" fill="#facc15" radius={4} />
                 </BarChart>
               </ChartContainer>
             </CardContent>
@@ -191,23 +176,14 @@ export default function DashboardPage() {
                   data={stockData}
                   margin={{ top: 20, right: 20, bottom: 5, left: 0 }}
                 >
+                  <CartesianGrid vertical={false} />
+                  <XAxis dataKey="category" tickLine={false} axisLine={false} />
+                  <YAxis />
                   <Tooltip content={<ChartTooltipContent />} />
-                  <Legend content={<ChartLegendContent nameKey="category" />} />
-                  <Bar
-                    dataKey="value"
-                    fill="var(--color-Electronics)"
-                    radius={4}
-                  />
-                  <Bar
-                    dataKey="value"
-                    fill="var(--color-Furniture)"
-                    radius={4}
-                  />
-                  <Bar
-                    dataKey="value"
-                    fill="var(--color-Consumables)"
-                    radius={4}
-                  />
+                  <Legend />
+                  <Bar dataKey="Electronics" fill="#6366f1" radius={4} />
+                  <Bar dataKey="Furniture" fill="#10b981" radius={4} />
+                  <Bar dataKey="Consumables" fill="#f59e0b" radius={4} />
                 </BarChart>
               </ChartContainer>
             </CardContent>
