@@ -31,6 +31,7 @@ import {
   YAxis,
   Tooltip,
   Legend,
+  ResponsiveContainer,
 } from "recharts";
 
 export default function DashboardPage() {
@@ -48,9 +49,13 @@ export default function DashboardPage() {
     { day: "Sun", delivered: 15, pending: 5 },
   ];
 
-  const stockData = [{ Electronics: 240, Furniture: 120, Consumables: 80 }];
+  const stockData = [
+    { category: "Electronics", value: 240 },
+    { category: "Furniture", value: 120 },
+    { category: "Consumables", value: 80 },
+  ];
 
-  const deliveryConfig = {
+  const deliveryConfig: ChartConfig = {
     delivered: { label: "Delivered", color: "#3b82f6" },
     pending: { label: "Pending", color: "#facc15" },
   };
@@ -72,8 +77,8 @@ export default function DashboardPage() {
   ];
 
   const visitorsConfig: ChartConfig = {
-    desktop: { label: "Desktop", color: "var(--chart-1)" },
-    mobile: { label: "Mobile", color: "var(--chart-2)" },
+    desktop: { label: "Desktop", color: "#3b82f6" },
+    mobile: { label: "Mobile", color: "#facc15" },
   };
 
   return (
@@ -146,18 +151,28 @@ export default function DashboardPage() {
                 config={deliveryConfig}
                 className="min-h-[250px] w-full"
               >
-                <BarChart
-                  data={deliveryData}
-                  margin={{ top: 20, right: 20, bottom: 5, left: 0 }}
-                >
-                  <CartesianGrid vertical={false} />
-                  <XAxis dataKey="day" tickLine={false} axisLine={false} />
-                  <YAxis />
-                  <Tooltip content={<ChartTooltipContent labelKey="day" />} />
-                  <Legend />
-                  <Bar dataKey="delivered" fill="#3b82f6" radius={4} />
-                  <Bar dataKey="pending" fill="#facc15" radius={4} />
-                </BarChart>
+                <ResponsiveContainer width="100%" height={250}>
+                  <BarChart
+                    data={deliveryData}
+                    margin={{ top: 20, right: 20, bottom: 5, left: 0 }}
+                  >
+                    <CartesianGrid vertical={false} />
+                    <XAxis dataKey="day" tickLine={false} axisLine={false} />
+                    <YAxis />
+                    <Tooltip content={<ChartTooltipContent labelKey="day" />} />
+                    <Legend />
+                    <Bar
+                      dataKey="delivered"
+                      fill={deliveryConfig.delivered.color}
+                      radius={4}
+                    />
+                    <Bar
+                      dataKey="pending"
+                      fill={deliveryConfig.pending.color}
+                      radius={4}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
               </ChartContainer>
             </CardContent>
           </Card>
@@ -172,26 +187,38 @@ export default function DashboardPage() {
                 config={stockConfig}
                 className="min-h-[250px] w-full"
               >
-                <BarChart
-                  data={stockData}
-                  margin={{ top: 20, right: 20, bottom: 5, left: 0 }}
-                >
-                  <CartesianGrid vertical={false} />
-                  <XAxis dataKey="category" tickLine={false} axisLine={false} />
-                  <YAxis />
-                  <Tooltip content={<ChartTooltipContent />} />
-                  <Legend />
-                  <Bar dataKey="Electronics" fill="#6366f1" radius={4} />
-                  <Bar dataKey="Furniture" fill="#10b981" radius={4} />
-                  <Bar dataKey="Consumables" fill="#f59e0b" radius={4} />
-                </BarChart>
+                <ResponsiveContainer width="100%" height={250}>
+                  <BarChart
+                    data={stockData}
+                    margin={{ top: 20, right: 20, bottom: 5, left: 0 }}
+                  >
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                      dataKey="category"
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <YAxis />
+                    <Tooltip content={<ChartTooltipContent />} />
+                    <Legend />
+                    {stockData.map((item) => (
+                      <Bar
+                        key={item.category}
+                        dataKey="value"
+                        name={item.category}
+                        fill={stockConfig[item.category].color}
+                        radius={4}
+                      />
+                    ))}
+                  </BarChart>
+                </ResponsiveContainer>
               </ChartContainer>
             </CardContent>
           </Card>
         </div>
 
         {/* Line Chart */}
-        <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
+        <div className="grid grid-cols-1 gap-6 mb-6">
           <Card className="border border-gray-200">
             <CardHeader>
               <CardTitle>Visitors Overview</CardTitle>
@@ -202,32 +229,38 @@ export default function DashboardPage() {
                 config={visitorsConfig}
                 className="min-h-[250px] w-full"
               >
-                <LineChart data={visitorsData} margin={{ left: 12, right: 12 }}>
-                  <CartesianGrid vertical={false} />
-                  <XAxis
-                    dataKey="month"
-                    tickLine={false}
-                    axisLine={false}
-                    tickMargin={8}
-                    tickFormatter={(value) => value.slice(0, 3)}
-                  />
-                  <YAxis />
-                  <Tooltip content={<ChartTooltipContent />} />
-                  <Line
-                    dataKey="desktop"
-                    type="monotone"
-                    stroke="var(--chart-1)"
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                  <Line
-                    dataKey="mobile"
-                    type="monotone"
-                    stroke="var(--chart-2)"
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                </LineChart>
+                <ResponsiveContainer width="100%" height={250}>
+                  <LineChart
+                    data={visitorsData}
+                    margin={{ left: 12, right: 12 }}
+                  >
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                      dataKey="month"
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={8}
+                      tickFormatter={(value) => value.slice(0, 3)}
+                    />
+                    <YAxis />
+                    <Tooltip content={<ChartTooltipContent />} />
+                    <Legend />
+                    <Line
+                      dataKey="desktop"
+                      type="monotone"
+                      stroke={visitorsConfig.desktop.color}
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                    <Line
+                      dataKey="mobile"
+                      type="monotone"
+                      stroke={visitorsConfig.mobile.color}
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
               </ChartContainer>
             </CardContent>
           </Card>
