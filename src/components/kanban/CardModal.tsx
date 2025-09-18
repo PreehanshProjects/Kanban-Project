@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useBoardStore, Card as CardType } from "../../store/boardStore";
+import { useBoardStore, Card as CardType } from "../../core/store/boardStore";
 
 type CardModalProps = { boardId: string; cardId: string; onClose: () => void };
 

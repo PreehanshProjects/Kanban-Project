@@ -6,7 +6,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import Card from "./Card";
-import { useBoardStore } from "../store/boardStore";
+import { useBoardStore } from "../../core/store/boardStore";
 
 export default function Column({
   boardId,

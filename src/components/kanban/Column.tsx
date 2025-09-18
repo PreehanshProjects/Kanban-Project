@@ -13,8 +13,8 @@ import {
   CheckIcon,
 } from "@heroicons/react/24/solid";
 import Card from "./Card";
-import ConfirmModal from "./modal/ConfirmModal";
-import { useBoardStore } from "../store/boardStore";
+import ConfirmModal from "../common/ConfirmModal";
+import { useBoardStore } from "../../core/store/boardStore";
 
 type ColumnProps = {
   boardId: string;

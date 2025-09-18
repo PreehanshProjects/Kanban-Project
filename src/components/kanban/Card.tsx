@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { PencilIcon, Bars3Icon } from "@heroicons/react/24/solid";
-import CardModal from "./modal/CardModal";
-import { useBoardStore } from "../store/boardStore";
+import CardModal from "./CardModal";
+import { useBoardStore } from "../../core/store/boardStore";
 
 type CardProps = { boardId: string; cardId: string };
 

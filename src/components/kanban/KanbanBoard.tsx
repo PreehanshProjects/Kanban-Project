@@ -13,9 +13,9 @@ import {
   SortableContext,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { useBoardStore } from "../../core/store/boardStore";
 import Column from "./Column";
 import Card from "./Card";
-import { useBoardStore } from "../store/boardStore";
 
 export default function KanbanBoard({ boardId }: { boardId: string }) {
   const board = useBoardStore((s) => s.boards.find((b) => b.id === boardId)!);

@@ -1,7 +1,7 @@
 // BoardEditor.tsx
 import React, { useState } from "react";
 import { XMarkIcon, PlusIcon } from "@heroicons/react/24/solid";
-import { useBoardStore } from "../store/boardStore";
+import { useBoardStore } from "../../core/store/boardStore";
 
 interface BoardEditorProps {
   onClose: () => void;
