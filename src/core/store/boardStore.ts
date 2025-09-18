@@ -101,7 +101,7 @@ export const useBoardStore = create<BoardStore>((set, get) => ({
       toast.success(`Board "${title}" created!`, {
         style: { background: "#22c55e", color: "#fff" },
       });
-      return { boards };
+      return { boards, selectedBoardId: newBoard.id }; // ✅ auto-select
     });
     return newBoard.id;
   },
@@ -282,12 +282,15 @@ export const useBoardStore = create<BoardStore>((set, get) => ({
         const newCols = [...b.columns];
         const [moved] = newCols.splice(fromIndex, 1);
         newCols.splice(toIndex, 0, moved);
+
         toast(`Moved column "${moved.title}"`, {
           style: { background: "#f97316", color: "#fff" },
         });
-        saveBoards(boards);
+
         return { ...b, columns: newCols };
       });
+
+      saveBoards(boards); // ✅ now saving the updated state
       return { boards };
     }),
 }));

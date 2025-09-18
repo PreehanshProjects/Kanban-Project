@@ -13,8 +13,8 @@ import {
   CheckIcon,
 } from "@heroicons/react/24/solid";
 import Card from "./Card";
-import ConfirmModal from "../common/ConfirmModal";
 import { useBoardStore } from "../../core/store/boardStore";
+import { motion, AnimatePresence } from "framer-motion";
 
 type ColumnProps = {
   boardId: string;
@@ -54,10 +54,15 @@ export default function Column({
 
   return (
     <>
-      <div
+      {/* Column container with animation */}
+      <motion.div
         ref={setNodeRef}
         style={style}
         className="bg-gray-50 p-4 rounded-xl shadow-lg w-72 flex-shrink-0 hover:shadow-2xl transition-shadow relative"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.8 }}
+        layout
       >
         {/* Column Header */}
         <div className="flex items-center justify-between mb-3">
@@ -91,7 +96,7 @@ export default function Column({
                 className="p-1 ml-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors"
                 title="Save"
               >
-                <CheckIcon className="ml-2w-4 h-4" />
+                <CheckIcon className="w-4 h-4" />
               </button>
             ) : (
               <button
@@ -143,15 +148,53 @@ export default function Column({
             <PlusIcon className="w-4 h-4" />
           </button>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Reusable Confirm Modal */}
-      <ConfirmModal
-        isOpen={showDeleteModal}
-        message="Are you sure you want to delete this column?"
-        onConfirm={handleDelete}
-        onCancel={() => setShowDeleteModal(false)}
-      />
+      {/* Animated Delete Modal */}
+      <AnimatePresence>
+        {showDeleteModal && (
+          <motion.div
+            key="backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+            onClick={() => setShowDeleteModal(false)}
+          >
+            <motion.div
+              key="modal"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="bg-white rounded-xl shadow-2xl w-80 p-6 relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">
+                Delete Column?
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Are you sure you want to delete this column? All cards will be
+                removed.
+              </p>
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={() => setShowDeleteModal(false)}
+                  className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
+                >
+                  Delete
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

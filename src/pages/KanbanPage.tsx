@@ -3,15 +3,12 @@ import React, { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import BoardEditor from "../components/kanban/BoardEditor";
 import KanbanBoard from "../components/kanban/KanbanBoard";
-import ConfirmModal from "../components/common/ConfirmModal";
 import MainLayout from "../components/layout/MainLayout";
 import { useBoardStore } from "../core/store/boardStore";
 
 export default function KanbanPage() {
   const [openEditor, setOpenEditor] = useState(false);
-  const [boardToDelete, setBoardToDelete] = useState<string | null>(null);
   const selectedBoardId = useBoardStore((s) => s.selectedBoardId);
-  const deleteBoard = useBoardStore((s) => s.deleteBoard);
 
   const currentUserRole: "SuperAdmin" | "Admin" | "Doyanier" | "Client" =
     "Admin";
@@ -31,17 +28,6 @@ export default function KanbanPage() {
       </section>
 
       {openEditor && <BoardEditor onClose={() => setOpenEditor(false)} />}
-
-      <ConfirmModal
-        isOpen={!!boardToDelete}
-        title="Delete Board?"
-        message="Are you sure you want to delete this board? All columns and cards will be permanently removed."
-        onCancel={() => setBoardToDelete(null)}
-        onConfirm={() => {
-          if (boardToDelete) deleteBoard(boardToDelete);
-          setBoardToDelete(null);
-        }}
-      />
     </MainLayout>
   );
 }
