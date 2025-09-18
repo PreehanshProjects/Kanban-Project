@@ -26,7 +26,6 @@ export default function KanbanBoard({ boardId }: { boardId: string }) {
   const moveCard = useBoardStore((s) => s.moveCard);
 
   const [activeId, setActiveId] = useState<string | null>(null);
-
   const sensors = useSensors(useSensor(PointerSensor));
 
   const onDragStart = (event: DragStartEvent) => {
@@ -66,7 +65,7 @@ export default function KanbanBoard({ boardId }: { boardId: string }) {
 
   return (
     <div>
-      {/* Add Column */}
+      {/* Add Column Button */}
       <button
         className="mb-2 px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
         onClick={() => addColumn(boardId, "New Column")}
@@ -86,18 +85,19 @@ export default function KanbanBoard({ boardId }: { boardId: string }) {
         >
           <div className="flex gap-4 overflow-auto p-2">
             <AnimatePresence initial={false}>
-              {board.columns.map((c) => (
+              {board.columns.map((column) => (
                 <motion.div
-                  key={c.id}
+                  key={column.id}
                   layout
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
+                  initial={{ opacity: 0, x: 20 }} // subtle slide-in from right
+                  animate={{ opacity: 1, x: 0 }} // fade + settle
+                  exit={{ opacity: 0, x: 20 }} // subtle exit
+                  transition={{ duration: 0.25, ease: "easeOut" }}
                   className="flex-shrink-0"
                 >
                   <Column
                     boardId={boardId}
-                    column={c}
+                    column={column}
                     boardCards={board.cards}
                   />
                 </motion.div>
@@ -111,8 +111,9 @@ export default function KanbanBoard({ boardId }: { boardId: string }) {
           {activeId && board.columns.find((col) => col.id === activeId) && (
             <motion.div
               className="w-72 p-4 bg-blue-100 border-2 border-blue-400 rounded-xl shadow-lg"
-              initial={{ scale: 0.95, opacity: 0.8 }}
-              animate={{ scale: 1, opacity: 1 }}
+              initial={{ opacity: 0.7 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.2 }}
             >
               {board.columns.find((col) => col.id === activeId)?.title}
             </motion.div>

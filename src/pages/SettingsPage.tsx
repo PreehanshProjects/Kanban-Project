@@ -26,7 +26,7 @@ export default function SettingsPage() {
       <Toaster position="bottom-right" reverseOrder={false} />
 
       {/* Navbar */}
-      <Navbar onNewBoard={() => setOpenEditor(true)} />
+      <Navbar />
 
       <div className="flex flex-1 p-4 gap-4">
         {/* Sidebar */}

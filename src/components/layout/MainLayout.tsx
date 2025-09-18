@@ -24,7 +24,7 @@ export default function MainLayout({
 
   return (
     <div className="min-h-screen bg-themeWhite flex flex-col">
-      <Navbar onNewBoard={() => setOpenEditor(true)} />
+      <Navbar />
       <div className="flex flex-1">
         <Sidebar
           role={currentUserRole}

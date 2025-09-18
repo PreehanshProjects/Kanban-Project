@@ -1,10 +1,10 @@
-// src/pages/KanbanPage.tsx
 import React, { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import BoardEditor from "../components/kanban/BoardEditor";
 import KanbanBoard from "../components/kanban/KanbanBoard";
 import MainLayout from "../components/layout/MainLayout";
 import { useBoardStore } from "../core/store/boardStore";
+import { PlusIcon } from "@heroicons/react/24/solid";
 
 export default function KanbanPage() {
   const [openEditor, setOpenEditor] = useState(false);
@@ -16,6 +16,17 @@ export default function KanbanPage() {
   return (
     <MainLayout currentUserRole={currentUserRole}>
       <Toaster position="bottom-right" reverseOrder={false} />
+
+      {/* New Board Button */}
+      <div className="mb-4 flex justify-end">
+        <button
+          className="flex items-center gap-1 px-4 py-2 bg-themeBlue text-themeWhite rounded-lg shadow hover:opacity-90 transition"
+          onClick={() => setOpenEditor(true)}
+        >
+          <PlusIcon className="w-5 h-5" />
+          New Board
+        </button>
+      </div>
 
       <section className="bg-white p-4 rounded-lg shadow min-h-[70vh] overflow-auto">
         {selectedBoardId ? (

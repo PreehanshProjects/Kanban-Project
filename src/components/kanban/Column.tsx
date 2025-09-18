@@ -54,26 +54,25 @@ export default function Column({
 
   return (
     <>
-      {/* Column container with animation */}
+      {/* Column container */}
       <motion.div
         ref={setNodeRef}
         style={style}
         className="bg-gray-50 p-4 rounded-xl shadow-lg w-72 flex-shrink-0 hover:shadow-2xl transition-shadow relative"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.8 }}
+        initial={{ opacity: 0, x: 10 }} // subtle horizontal slide
+        animate={{ opacity: 1, x: 0 }} // fade + settle
+        exit={{ opacity: 0, x: 10 }} // subtle exit
         layout
+        transition={{ duration: 0.25, ease: "easeOut" }}
       >
         {/* Column Header */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            {/* Drag Handle */}
             <Bars3Icon
               className="w-5 h-5 text-gray-400 cursor-move"
               {...listeners}
               {...attributes}
             />
-
             {editingTitle ? (
               <input
                 className="p-1 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -150,7 +149,7 @@ export default function Column({
         </div>
       </motion.div>
 
-      {/* Animated Delete Modal */}
+      {/* Delete Modal */}
       <AnimatePresence>
         {showDeleteModal && (
           <motion.div
@@ -163,10 +162,10 @@ export default function Column({
           >
             <motion.div
               key="modal"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              initial={{ opacity: 0, y: -10 }} // subtle vertical slide
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
               className="bg-white rounded-xl shadow-2xl w-80 p-6 relative"
               onClick={(e) => e.stopPropagation()}
             >
