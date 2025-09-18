@@ -12,7 +12,6 @@ import {
   UserCircleIcon,
   TrashIcon,
   Bars3Icon,
-  XMarkIcon,
 } from "@heroicons/react/24/solid";
 
 interface SidebarItem {
@@ -107,16 +106,16 @@ export default function Sidebar({
   return (
     <>
       {/* Mobile top bar */}
-      <div className="md:hidden flex items-center justify-between bg-white shadow-md p-4">
+      <div className="md:hidden flex items-center justify-between bg-themeWhite shadow-md p-4">
         <button onClick={() => setOpen(true)}>
-          <Bars3Icon className="w-6 h-6 text-gray-700" />
+          <Bars3Icon className="w-6 h-6 text-themeBlue" />
         </button>
       </div>
 
       {/* Sidebar */}
       <aside
         className={`
-          fixed top-0 left-0 z-50 h-full bg-white shadow-lg flex flex-col justify-between p-4 transition-all duration-300
+          fixed top-0 left-0 z-50 h-full bg-themeWhite shadow-lg flex flex-col justify-between p-4 transition-all duration-300
           ${open ? "translate-x-0" : "-translate-x-full"} 
           md:static md:translate-x-0 md:flex-none
           ${collapsed ? "w-16" : "w-64"}
@@ -125,14 +124,13 @@ export default function Sidebar({
         {/* Collapse toggle for desktop */}
         <div className="hidden md:flex justify-end mb-4">
           <button onClick={() => setCollapsed(!collapsed)}>
-            <Bars3Icon className="w-6 h-6 text-gray-700" />
+            <Bars3Icon className="w-6 h-6 text-themeBlue" />
           </button>
         </div>
 
         <div className="flex-1 overflow-y-auto space-y-6">
-          {/* Logo / title */}
           {!collapsed && (
-            <h2 className="hidden md:block text-xl font-bold text-gray-700 mb-2">
+            <h2 className="hidden md:block text-xl font-bold text-themeBlue mb-2">
               Freight App
             </h2>
           )}
@@ -144,10 +142,10 @@ export default function Sidebar({
                 key={item.id}
                 to={item.path}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 p-2 rounded-lg hover:bg-blue-50 transition ${
+                  `flex items-center gap-3 p-2 rounded-lg transition ${
                     isActive
-                      ? "bg-blue-100 font-semibold text-blue-600"
-                      : "text-gray-700"
+                      ? "bg-themeBlue/10 font-semibold text-themeBlue"
+                      : "text-themeBlue/80 hover:bg-themeBlue/5"
                   }`
                 }
               >
@@ -164,7 +162,7 @@ export default function Sidebar({
             onDeleteBoard && (
               <div>
                 <button
-                  className="w-full flex justify-between items-center text-gray-500 uppercase text-xs font-medium mb-2"
+                  className="w-full flex justify-between items-center text-themeBlue/60 uppercase text-xs font-medium mb-2"
                   onClick={() => setBoardsOpen(!boardsOpen)}
                 >
                   <span>Boards</span>
@@ -185,10 +183,10 @@ export default function Sidebar({
                         className="flex justify-between items-center"
                       >
                         <button
-                          className={`flex-1 text-left flex items-center justify-between p-2 rounded-lg hover:bg-blue-50 transition ${
+                          className={`flex-1 text-left flex items-center justify-between p-2 rounded-lg transition ${
                             selectedBoardId === b.id
-                              ? "bg-blue-100 font-semibold text-blue-600"
-                              : "text-gray-700"
+                              ? "bg-themeBlue/10 font-semibold text-themeBlue"
+                              : "text-themeBlue/80 hover:bg-themeBlue/5"
                           }`}
                           onClick={() => {
                             onSelectBoard(b.id);
@@ -198,11 +196,11 @@ export default function Sidebar({
                         >
                           <span>{b.title}</span>
                           {selectedBoardId === b.id && (
-                            <Squares2X2Icon className="w-4 h-4 text-blue-500" />
+                            <Squares2X2Icon className="w-4 h-4 text-themeBlue" />
                           )}
                         </button>
                         <button
-                          className="ml-2 text-red-500 hover:text-red-700"
+                          className="ml-2 text-themeRed hover:text-red-700"
                           onClick={() => onDeleteBoard(b.id)}
                           title="Delete Board"
                         >
@@ -218,7 +216,7 @@ export default function Sidebar({
 
         {/* Footer */}
         {!collapsed && (
-          <div className="mt-4 text-gray-400 text-sm">
+          <div className="mt-4 text-themeBlue/40 text-sm">
             &copy; {new Date().getFullYear()} Freight Co.
           </div>
         )}

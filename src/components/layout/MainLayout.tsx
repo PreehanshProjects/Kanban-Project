@@ -23,7 +23,7 @@ export default function MainLayout({
   const [boardToDelete, setBoardToDelete] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-themeWhite flex flex-col">
       <Navbar onNewBoard={() => setOpenEditor(true)} />
       <div className="flex flex-1">
         <Sidebar
@@ -31,7 +31,7 @@ export default function MainLayout({
           boards={boards}
           selectedBoardId={selectedBoardId ?? null}
           onSelectBoard={setSelected}
-          onDeleteBoard={(id) => setBoardToDelete(id)} // only opens modal
+          onDeleteBoard={(id) => setBoardToDelete(id)}
         />
         <main className="flex-1 p-4">{children}</main>
       </div>

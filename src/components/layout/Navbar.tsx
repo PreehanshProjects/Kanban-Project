@@ -7,13 +7,13 @@ interface NavbarProps {
 
 export default function Navbar({ onNewBoard }: NavbarProps) {
   return (
-    <header className="flex items-center justify-between p-4 bg-white shadow-md">
+    <header className="flex items-center justify-between p-4 bg-themeWhite shadow-md">
       <div className="flex items-center gap-2">
-        <Squares2X2Icon className="w-6 h-6 text-blue-600" />
-        <h1 className="text-xl font-bold text-gray-800">Kanban App</h1>
+        <Squares2X2Icon className="w-6 h-6 text-themeBlue" />
+        <h1 className="text-xl font-bold text-themeBlue">Kanban App</h1>
       </div>
       <button
-        className="flex items-center gap-1 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+        className="flex items-center gap-1 px-4 py-2 bg-themeBlue text-themeWhite rounded-lg shadow hover:opacity-90 transition"
         onClick={onNewBoard}
       >
         <PlusIcon className="w-5 h-5" />
