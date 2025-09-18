@@ -9,6 +9,8 @@ export type Card = {
   assignee?: { name: string; avatar: string };
   status?: "Pending" | "In Progress" | "Done";
   priority?: "High" | "Medium" | "Low";
+  createdAt?: string; // ISO string for progress calculation
+  deadline?: string; // ISO string
 };
 
 export type Column = { id: string; title: string; cardIds: string[] };
@@ -22,14 +24,19 @@ export type Board = {
 interface BoardStore {
   boards: Board[];
   selectedBoardId?: string;
+
   setSelectedBoard: (id: string) => void;
   addBoard: (title: string) => string;
   deleteBoard: (boardId: string) => void;
+
   addColumn: (boardId: string, title: string) => void;
   renameColumn: (boardId: string, columnId: string, title: string) => void;
   deleteColumn: (boardId: string, columnId: string) => void;
+
   addCard: (boardId: string, columnId: string, title: string) => void;
+  deleteCard: (boardId: string, cardId: string) => void;
   updateCard: (boardId: string, cardId: string, patch: Partial<Card>) => void;
+
   moveCard: (
     boardId: string,
     fromColumnId: string,
@@ -103,12 +110,10 @@ export const useBoardStore = create<BoardStore>((set, get) => ({
     set((state) => {
       const board = state.boards.find((b) => b.id === boardId);
       if (!board) return { boards: state.boards };
-
       const boards = state.boards.filter((b) => b.id !== boardId);
       const selectedBoardId =
         state.selectedBoardId === boardId ? undefined : state.selectedBoardId;
       saveBoards(boards);
-
       toast.error(`Board "${board.title}" deleted`, {
         style: { background: "#ef4444", color: "#fff" },
       });
@@ -176,11 +181,13 @@ export const useBoardStore = create<BoardStore>((set, get) => ({
       const boards = state.boards.map((b) => {
         if (b.id !== boardId) return b;
         const id = nanoid();
+        const now = new Date().toISOString();
         const newCard: Card = {
           id,
           title,
           status: "Pending",
           priority: "Medium",
+          createdAt: now,
         };
         const newCards = { ...b.cards, [id]: newCard };
         const newColumns = b.columns.map((c) =>
@@ -191,6 +198,33 @@ export const useBoardStore = create<BoardStore>((set, get) => ({
         });
         return { ...b, cards: newCards, columns: newColumns };
       });
+      saveBoards(boards);
+      return { boards };
+    }),
+
+  deleteCard: (boardId: string, cardId: string) =>
+    set((state) => {
+      const boards = state.boards.map((b) => {
+        if (b.id !== boardId) return b;
+
+        // Remove card from cards object
+        const newCards = { ...b.cards };
+        const cardTitle = newCards[cardId]?.title || "Card";
+        delete newCards[cardId];
+
+        // Remove cardId from its column
+        const newColumns = b.columns.map((c) => ({
+          ...c,
+          cardIds: c.cardIds.filter((id) => id !== cardId),
+        }));
+
+        toast.error(`Card "${cardTitle}" deleted`, {
+          style: { background: "#ef4444", color: "#fff" },
+        });
+
+        return { ...b, cards: newCards, columns: newColumns };
+      });
+
       saveBoards(boards);
       return { boards };
     }),
@@ -223,16 +257,17 @@ export const useBoardStore = create<BoardStore>((set, get) => ({
         else toCol.cardIds.splice(index, 0, cardId);
 
         const cardTitle = b.cards[cardId]?.title || "Card";
-
-        if (fromColumnId !== toColumnId) {
-          toast(`Moved "${cardTitle}" to "${toCol.title}"`, {
-            style: { background: "#10b981", color: "#fff" },
-          });
-        } else {
-          toast(`Reordered "${cardTitle}"`, {
-            style: { background: "#3b82f6", color: "#fff" },
-          });
-        }
+        toast(
+          fromColumnId !== toColumnId
+            ? `Moved "${cardTitle}" to "${toCol.title}"`
+            : `Reordered "${cardTitle}"`,
+          {
+            style: {
+              background: fromColumnId !== toColumnId ? "#10b981" : "#3b82f6",
+              color: "#fff",
+            },
+          }
+        );
 
         return b;
       });
