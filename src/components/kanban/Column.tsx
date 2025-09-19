@@ -14,7 +14,6 @@ import {
 } from "@heroicons/react/24/solid";
 import Card from "./Card";
 import { useBoardStore } from "../../core/store/boardStore";
-import { motion, AnimatePresence } from "framer-motion";
 
 type ColumnProps = {
   boardId: string;
@@ -55,15 +54,10 @@ export default function Column({
   return (
     <>
       {/* Column container */}
-      <motion.div
+      <div
         ref={setNodeRef}
         style={style}
         className="bg-gray-50 p-4 rounded-xl shadow-lg w-72 flex-shrink-0 hover:shadow-2xl transition-shadow relative"
-        initial={{ opacity: 0, x: 10 }} // subtle horizontal slide
-        animate={{ opacity: 1, x: 0 }} // fade + settle
-        exit={{ opacity: 0, x: 10 }} // subtle exit
-        layout
-        transition={{ duration: 0.25, ease: "easeOut" }}
       >
         {/* Column Header */}
         <div className="flex items-center justify-between mb-3">
@@ -147,53 +141,42 @@ export default function Column({
             <PlusIcon className="w-4 h-4" />
           </button>
         </div>
-      </motion.div>
+      </div>
 
       {/* Delete Modal */}
-      <AnimatePresence>
-        {showDeleteModal && (
-          <motion.div
-            key="backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
-            onClick={() => setShowDeleteModal(false)}
+      {showDeleteModal && (
+        <div
+          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+          onClick={() => setShowDeleteModal(false)}
+        >
+          <div
+            className="bg-white rounded-xl shadow-2xl w-80 p-6 relative"
+            onClick={(e) => e.stopPropagation()}
           >
-            <motion.div
-              key="modal"
-              initial={{ opacity: 0, y: -10 }} // subtle vertical slide
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="bg-white rounded-xl shadow-2xl w-80 p-6 relative"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h3 className="text-lg font-semibold mb-4 text-gray-800">
-                Delete Column?
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Are you sure you want to delete this column? All cards will be
-                removed.
-              </p>
-              <div className="flex justify-end gap-2">
-                <button
-                  onClick={() => setShowDeleteModal(false)}
-                  className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleDelete}
-                  className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
-                >
-                  Delete
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <h3 className="text-lg font-semibold mb-4 text-gray-800">
+              Delete Column?
+            </h3>
+            <p className="text-gray-600 mb-4">
+              Are you sure you want to delete this column? All cards will be
+              removed.
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
